@@ -7,11 +7,11 @@ function Product({ product }) {
   return (
     <div>
       <Card className="my-3 p-3 rounded">
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/product/${product._id}/${product.name}`}>
           <Card.Img src={product.image} />
         </Link>
         <Card.Body>
-          <Link to={`/product/${product._id}`}>
+          <Link to={`/product/${product._id}/${product.name}`}>
             <Card.Title as="div">
               <h6 className="text-muted">{product.name}</h6>
             </Card.Title>
@@ -20,7 +20,7 @@ function Product({ product }) {
             <div className="my-3">
               <Rating
                 value={product.rating}
-                text={`${product.numReviews} reviews`}
+                text={`${product.numReviews}`}
               />
             </div>
           </Card.Text>

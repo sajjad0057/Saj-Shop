@@ -6,9 +6,9 @@ const Rating = ({ value, text}) => {
     <div className="rating">
       {
         [1,2,3,4,5].map((v,idx)=>{
-          console.log("val",v);
+          
           return(
-            <span>
+            <span key={idx}>
             <i
               style={{ color:"#a8a8a7" }}
               className={
@@ -24,7 +24,9 @@ const Rating = ({ value, text}) => {
           )
         })
       }
-      <span>{text && text}</span>
+      <p>
+      <i>{text && text} reviews</i>
+      </p>
 
     </div>
   )
