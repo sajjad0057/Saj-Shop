@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .products import products
+from .serializers import ProductSerializer
+from .models import Product
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -24,16 +26,17 @@ def getRoutes(request):
 
 @api_view(['GET'])
 def getProducts(request):
-    return Response(products)
+    products = Product.objects.all()
+    serializer = ProductSerializer(products,many=True)
+    return Response(serializer.data) # many = False cz, here serialize many product.
 
 
 @api_view(['GET'])
 def getSingleProduct(request,pk):
-    product = None
-    for i in products:
-        if i['id'] == pk:
-            product = i
-            break
-        else:
-            product = {'message':'something wrong !'}
-    return Response(product)
+    try:
+        product = Product.objects.get(id = pk)
+        serializer = ProductSerializer(product,many = False) # many = False cz, here serialize just single product.
+        return Response(serializer.data)        
+    except Product.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
