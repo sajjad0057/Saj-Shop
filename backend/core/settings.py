@@ -43,6 +43,8 @@ INSTALLED_APPS = [
      #DRF
      'rest_framework',
      'corsheaders',
+     # For django-cleanup
+     'django_cleanup.apps.CleanupConfig',
 
 
 ]
