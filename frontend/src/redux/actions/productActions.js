@@ -13,6 +13,7 @@ export const listProducts = () =>async (dispatch)=>{
         })
 
     }catch(err){
+        // console.log("sajjad",err.message,err.response,err.response.data.message);
         dispatch({
             type:actionTypes.PRODUCT_LIST_FAILED,
             payload : err.response && err.response.data.message
