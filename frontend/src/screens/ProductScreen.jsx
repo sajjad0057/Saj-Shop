@@ -17,8 +17,8 @@ import { productDetails } from "../redux/actions/productActions";
 
 const ProductScreen = (props) => {
   const [Qty, setQty] = useState(1);
-  console.log("Qty : ", Qty);
-  console.log("ProductScreen props ---> :",props);
+  // console.log("Qty : ", Qty);
+  // console.log("ProductScreen props ---> :",props);
 
   const dispatch = useDispatch();
 
@@ -30,7 +30,7 @@ const ProductScreen = (props) => {
   }, [dispatch]);
 
   const addToCartHandler = () =>{
-    console.log("addToCartHandler called !");
+    // console.log("addToCartHandler called !");
     props.history.push(`/cart/${props.match.params.id}?qty=${Qty}`)
   }
 
