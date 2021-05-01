@@ -14,7 +14,6 @@ function HomeScreen() {
   // console.log("Check -----> ", productList);
 
   useEffect(() => {
-    console.log("fhjsfjhfgsh");
     dispatch(listProducts());
   }, [dispatch]);
 

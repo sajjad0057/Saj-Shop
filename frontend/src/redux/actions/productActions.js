@@ -36,7 +36,6 @@ export const productDetails = (id) =>async (dispatch)=>{
         })
 
     }catch(err){
-        // console.log("sajjad",err.message,err.response,err.response.data.message);
         dispatch({
             type:actionTypes.PRODUCT_DETAILS_FAILED,
             payload : err.response && err.response.data.message
