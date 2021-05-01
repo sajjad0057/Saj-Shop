@@ -17,3 +17,21 @@ export const productListReducer = (state={products:[]},action) => {
     }
 
 }
+
+
+export const productDetailReducer = (state={product:{reviews:[]}},action) => {
+    switch(action.type){
+        case actionTypes.PRODUCT_DETAILS_REQUEST:
+            return {loading:true,...state}
+        case actionTypes.PRODUCT_DETAILS_SUCCESS:
+            return {loading:false,product:action.payload}
+            
+        case actionTypes.PRODUCT_DETAILS_FAILED:
+            return {loading:false,error:action.payload}
+
+        default:
+            return state
+
+    }
+
+}

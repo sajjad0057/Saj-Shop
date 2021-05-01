@@ -23,3 +23,29 @@ export const listProducts = () =>async (dispatch)=>{
         })
     }
 }
+
+
+export const productDetails = (id) =>async (dispatch)=>{
+
+    try{
+        dispatch({type:actionTypes.PRODUCT_DETAILS_REQUEST})
+        const {data} = await axios.get(`/api/products/${id}`)
+        dispatch({
+            type : actionTypes.PRODUCT_DETAILS_SUCCESS,
+            payload : data
+        })
+
+    }catch(err){
+        // console.log("sajjad",err.message,err.response,err.response.data.message);
+        dispatch({
+            type:actionTypes.PRODUCT_DETAILS_FAILED,
+            payload : err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message
+        
+        })
+    }
+}
+
+
+

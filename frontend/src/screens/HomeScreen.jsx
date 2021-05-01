@@ -11,11 +11,12 @@ function HomeScreen() {
   const productList = useSelector((state) => state.productList);
   const { loading, products, error } = productList;
 
-  console.log("Check -----> ", productList);
+  // console.log("Check -----> ", productList);
 
   useEffect(() => {
+    console.log("fhjsfjhfgsh");
     dispatch(listProducts());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
