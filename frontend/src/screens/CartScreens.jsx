@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../redux/actions/cartActions";
+import { addToCart, removeFromCart } from "../redux/actions/cartActions";
 import { ListGroup, Row, Col, Image, Form, Button, Card } from "react-bootstrap";
 import Message from "../components/Message";
 
@@ -25,6 +25,8 @@ function CartScreens(props) {
 
   const removeCartHandler = (id) => {
     console.log("CartScreens ----> Remove Cart Id :", id);
+    dispatch(removeFromCart(id))
+    props.history.push('/cart')
   };
 
   const checkOutHandler = ()=>{
