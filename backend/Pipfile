@@ -8,6 +8,7 @@ django = "==3.2"
 djangorestframework = "*"
 pillow = "*"
 django-cleanup = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 

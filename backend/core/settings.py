@@ -49,6 +49,33 @@ INSTALLED_APPS = [
 
 ]
 
+
+
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # For simple-jwt 
+    )
+
+}
+
+
+
+# For django-rest-framework-simplejwt
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+
+}
+
+
+
+
 MIDDLEWARE = [
     # For django-cors-headers
     'corsheaders.middleware.CorsMiddleware',
