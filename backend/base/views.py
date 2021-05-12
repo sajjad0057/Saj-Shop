@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer,UserSerializer,UserSerializerWithToken
 from .models import Product
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -14,9 +14,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
-
-        data['username'] = self.user.username
-        data['email'] = self.user.email
+        print("test -----> MyTokenObtainPairSerializer in views.py --> :",data)
+        serializer = UserSerializerWithToken(self.user).data
+        for k,v in serializer.items():
+            data[k] = v
         return data
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -40,6 +41,18 @@ def getRoutes(request):
         "api/products/update/<id>/",
     ]
     return Response(routes)
+
+
+@api_view(['GET'])
+def getUserProfile(request):
+    user = request.user
+    serializer = UserSerializer(user,many=False) # many = False cz, here serialize just one user.
+    return Response(serializer.data) 
+
+
+
+
+
 
 @api_view(['GET'])
 def getProducts(request):
