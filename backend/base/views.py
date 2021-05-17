@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from .serializers import ProductSerializer,UserSerializer,UserSerializerWithToken
 from django.contrib.auth.models import User
 from .models import Product
+from django.contrib.auth.hashers import make_password
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
@@ -17,7 +18,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs) # here data is a dict, this dict contains 'resfresh', 'access', 'token' and etc key and their value.
-        #print("test -----> MyTokenObtainPairSerializer in views.py --> :",data)
+        print("test -----> MyTokenObtainPairSerializer in views.py --> :",UserSerializerWithToken(self.user))
         serializer = UserSerializerWithToken(self.user).data
         for k,v in serializer.items():
             data[k] = v
@@ -31,19 +32,26 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 # Create your views here.
 
-@api_view(['GET'])
-def getRoutes(request):
-    routes = [
-        "api/products/",
-        "api/products/create/",
-        "api/products/upload/",
-        "api/products/<id>/reviews/",
-        "api/products/top/",
-        "api/products/<id>/",
-        "api/products/delete/<id>/",
-        "api/products/update/<id>/",
-    ]
-    return Response(routes)
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
+    print("data form  registerUser: ",data)
+    try:
+        user = User.objects.create(
+        first_name = data['name'],
+        username = data['email'],
+        email = data['email'],
+        password = make_password(data['password'])
+
+
+        )
+        serializer = UserSerializerWithToken(user,many=False)
+        return Response(serializer.data)
+    except:
+        message = {'detail': "email has already exists"}
+        return Response(message,status.HTTP_400_BAD_REQUEST)
+
+
 
 
 @api_view(['GET'])
