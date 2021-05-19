@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
      # Apps
-     'base',
+     'base.apps.BaseConfig',  # write this frmt ,if using django signals by creating signals.py file. 
      #DRF
      'rest_framework',
      'corsheaders',
