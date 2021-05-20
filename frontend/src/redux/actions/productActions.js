@@ -16,8 +16,8 @@ export const listProducts = () =>async (dispatch)=>{
         // console.log("sajjad",err.message,err.response,err.response.data.message);
         dispatch({
             type:actionTypes.PRODUCT_LIST_FAILED,
-            payload : err.response && err.response.data.message
-            ? err.response.data.message
+            payload : err.response && err.response.data.detail
+            ? err.response.data.detail
             : err.message
         
         })
@@ -38,8 +38,8 @@ export const productDetails = (id) =>async (dispatch)=>{
     }catch(err){
         dispatch({
             type:actionTypes.PRODUCT_DETAILS_FAILED,
-            payload : err.response && err.response.data.message
-            ? err.response.data.message
+            payload : err.response && err.response.data.detail
+            ? err.response.data.detail
             : err.message
         
         })
