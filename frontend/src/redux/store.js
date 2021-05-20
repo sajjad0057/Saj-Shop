@@ -35,10 +35,10 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
 
 const initState = {
   cart: {
-    cartItems: cartItemFromStorage,
+    cartItems: cartItemFromStorage, // here, In global state Contain, cartReducer state , cart  property "cartItems" is  refill/updated by browser storage.
   },
   userLogin : {
-    userInfo : userInfoFromStorage,
+    userInfo : userInfoFromStorage,  // here, In global state Contain, useReducer state , userLogin  property "userInfo" is  refill/updated by browser storage.
   }
 };
 

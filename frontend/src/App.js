@@ -9,6 +9,7 @@ import Header from './components/Header'
 import HomeScreen from './screens/HomeScreen'
 import ProductScreen from './screens/ProductScreen'
 import CartScreens from './screens/CartScreens'
+import LoginScreen from './screens/LoginScreen'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/' exact component={HomeScreen}/>
         <Route path='/product/:id/:name' component={ProductScreen}/>
         <Route path='/cart/:id?' component={CartScreens}/>
+        <Route path='/login' component={LoginScreen}/>
         </Container>
       
       </main>
