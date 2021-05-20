@@ -20,7 +20,7 @@ const LoginScreen = (props) => {
 
 
 
-  console.log("LoginScreen ----- > ", props)
+//   console.log("LoginScreen ----- > ", props)
   const redirect = props.location.serach ? props.location.serach.split("=")[1] : '/';
 
 
@@ -33,7 +33,7 @@ const LoginScreen = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("LoginScreen --- submitHandler triggered");
+    // console.log("LoginScreen --- submitHandler triggered");
     dispatch(Login(email,password))
 
   };

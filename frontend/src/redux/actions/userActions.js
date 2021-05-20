@@ -18,7 +18,7 @@ export const Login = (email, password) => async (dispatch) => {
       { username: email,password: password,},
       config
     );
-    console.log("userActions.js ----->",data);
+    // console.log("userActions.js ----->",data);
     dispatch({
         type : actionTypes.USER_LOGIN_SUCCESS,
         payload : data
@@ -36,3 +36,13 @@ export const Login = (email, password) => async (dispatch) => {
     });
   }
 };
+
+
+
+export const Logout = ()=>(dispatch)=>{
+    localStorage.removeItem('userInfo')
+    dispatch({
+        type : actionTypes.USER_LOGIN_LOGOUT,
+    })
+
+}
