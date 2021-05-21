@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector,useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import {
   Navbar,
   Nav,
@@ -13,15 +13,14 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Logout } from "../redux/actions/userActions";
 
 function Header() {
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const dispatch = useDispatch();
 
-  const userLogin = useSelector(state => state.userLogin)
-  const {userInfo} = userLogin
-  const dispatch = useDispatch()
-
-  const logoutHandler = ()=>{
+  const logoutHandler = () => {
     console.log("from Header logoutHandler triggered!");
-    dispatch(Logout())
-  }
+    dispatch(Logout());
+  };
 
   return (
     <div>
@@ -32,35 +31,6 @@ function Header() {
               <Navbar.Brand href="#home">Saj Shop</Navbar.Brand>
             </LinkContainer>
 
-            {
-            userInfo ?
-            (
-              <NavDropdown title={userInfo.name} id='username'>
-                <LinkContainer to='/profile'>
-                  <NavDropdown.Item>
-                    Profile
-                  </NavDropdown.Item>
-                </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                
-
-              </NavDropdown>
-            )
-            :
-            (
-              <LinkContainer to="/login">
-              <Nav.Link>
-                <i class="fas fa-sign-in-alt"></i>
-                Login
-              </Nav.Link>
-            </LinkContainer>
-            )
-
-            }
-
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
                 <LinkContainer to="/cart">
@@ -69,8 +39,25 @@ function Header() {
                     Cart
                   </Nav.Link>
                 </LinkContainer>
-
+                {userInfo ? (
+                  <NavDropdown title={userInfo.name} id="username">
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>Profile</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Item onClick={logoutHandler}>
+                      Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                ) : (
+                  <LinkContainer to="/login">
+                    <Nav.Link>
+                      <i class="fas fa-sign-in-alt"></i>
+                      Login
+                    </Nav.Link>
+                  </LinkContainer>
+                )}
               </Nav>
+
               <Form inline>
                 <FormControl
                   type="text"
@@ -80,6 +67,7 @@ function Header() {
                 <Button variant="outline-success">Search</Button>
               </Form>
             </Navbar.Collapse>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
           </Container>
         </Navbar>
       </header>

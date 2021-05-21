@@ -6,40 +6,31 @@ import {
   productDetailReducer,
 } from "./reducers/productReducer";
 import { cartReducer } from "./reducers/cartReducer";
-import { userLoginReducer } from "./reducers/userReducer";
+import { userLoginReducer, userRegisterReducer } from "./reducers/userReducer";
 
 const reducer = combineReducers({
   productList: productListReducer,
   productDetail: productDetailReducer,
   cart: cartReducer,
   userLogin: userLoginReducer,
+  userRegister : userRegisterReducer,
 });
-
-
-
-
 
 const cartItemFromStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : [];
 
-
-
 const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
-
-
-
-
 
 const initState = {
   cart: {
     cartItems: cartItemFromStorage, // here, In global state Contain, cartReducer state , cart  property "cartItems" is  refill/updated by browser storage.
   },
-  userLogin : {
-    userInfo : userInfoFromStorage,  // here, In global state Contain, useReducer state , userLogin  property "userInfo" is  refill/updated by browser storage.
-  }
+  userLogin: {
+    userInfo: userInfoFromStorage, // here, In global state Contain, useReducer state , userLogin  property "userInfo" is  refill/updated by browser storage.
+  },
 };
 
 const middleware = [thunk];

@@ -21,7 +21,7 @@ const LoginScreen = (props) => {
 
 
 //   console.log("LoginScreen ----- > ", props)
-  const redirect = props.location.serach ? props.location.serach.split("=")[1] : '/';
+  const redirect = props.location.serach ? props.location.serach.split("=")[1] : '/register';
 
 
 
@@ -54,6 +54,7 @@ const LoginScreen = (props) => {
           <Form.Group controlId="email">
             <Form.Label> Email Address </Form.Label>
             <Form.Control
+            required
               type="email"
               placeholder="Enter Email"
               value={email}
@@ -64,6 +65,7 @@ const LoginScreen = (props) => {
           <Form.Group controlId="password">
             <Form.Label>Enter Password </Form.Label>
             <Form.Control
+            required
               type="password"
               placeholder="Enter Password"
               value={password}
