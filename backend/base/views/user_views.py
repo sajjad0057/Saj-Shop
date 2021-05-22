@@ -14,6 +14,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 
+
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs) # here data is a dict, this dict contains 'resfresh', 'access', 'token' and etc key and their value.
@@ -23,8 +25,15 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             data[k] = v
         return data
 
+
+
+
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+
+
 
 
 
@@ -59,6 +68,37 @@ def getUserProfile(request):
     user = request.user
     serializer = UserSerializer(user,many=False) # many = False cz, here serialize just one user.
     return Response(serializer.data) 
+
+
+
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateUserProfile(request):
+    user = request.user
+    serializer = UserSerializerWithToken(user,many=False) # many = False cz, here serialize just one user.
+    
+    data = request.data
+    #print("updateUserProfile -----> user , data : ",user,data)
+
+    user.first_name = data['name']
+    user.username = data['email']
+    user.email = data['email']
+
+
+    if data['password'] !='':
+        user.password = make_password(data['password'])
+
+    user.save()
+
+    return Response(serializer.data) 
+
+
+
+
+
+
 
 
 @api_view(['GET'])
