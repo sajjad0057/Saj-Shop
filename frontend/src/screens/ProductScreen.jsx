@@ -27,7 +27,7 @@ const ProductScreen = (props) => {
 
   useEffect(() => {
     dispatch(productDetails(props.match.params.id));
-  }, [dispatch]);
+  }, [dispatch,props.match.params.id]);
 
   const addToCartHandler = () =>{
     // console.log("addToCartHandler called !");

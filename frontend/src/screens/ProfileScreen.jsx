@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import FormContainer from "../components/FormContainer";
+import { USER_UPDATE_PROFILE_RESET } from '../redux/constants/userConstant'
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserDetails } from "../redux/actions/userActions";
+import { getUserDetails,updateUserProfile } from "../redux/actions/userActions";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 
@@ -19,20 +19,26 @@ function ProfileScreen(props) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  const { success } = userUpdateProfile;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!userInfo) {
       props.history.push("/login");
     } else {
-      if (!user || !user.name) {
+      if (!user || !user.name || success) {
+        dispatch({
+          type : USER_UPDATE_PROFILE_RESET
+        })
         dispatch(getUserDetails("profile"));
       } else {
         setName(user.name);
         setEmail(user.email);
       }
     }
-  }, [dispatch, userInfo, user]);
+  }, [dispatch, userInfo, user,success]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -40,7 +46,16 @@ function ProfileScreen(props) {
     if (password !== confirmPassword) {
       setMessage("Password don't matched !");
     } else {
-      console.log("Updateing The Profile ...... !");
+      console.log("profile Updated Triggered !");
+      setPassword("")
+      setConfirmPassword("")
+      dispatch(updateUserProfile({
+        'id':user.id,
+        'name':name,
+        'email':email,
+        'password':password
+      }))
+      setMessage("Your Info is Updated");
     }
   };
 
