@@ -1,11 +1,6 @@
 import * as actionTypes from "../constants/userConstant";
 import axios from "axios";
 
-
-
-
-
-
 export const Login = (email, password) => async (dispatch) => {
   try {
     dispatch({
@@ -20,17 +15,16 @@ export const Login = (email, password) => async (dispatch) => {
 
     const { data } = await axios.post(
       "/api/users/login/",
-      { 'username': email,'password': password,},
+      { username: email, password: password },
       config
     );
     // console.log("userActions.js ----->",data);
     dispatch({
-        type : actionTypes.USER_LOGIN_SUCCESS,
-        payload : data
-    })
+      type: actionTypes.USER_LOGIN_SUCCESS,
+      payload: data,
+    });
 
-    localStorage.setItem('userInfo',JSON.stringify(data))
-
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
       type: actionTypes.USER_LOGIN_FAIL,
@@ -42,64 +36,82 @@ export const Login = (email, password) => async (dispatch) => {
   }
 };
 
+export const Logout = () => (dispatch) => {
+  localStorage.removeItem("userInfo");
+  dispatch({
+    type: actionTypes.USER_LOGIN_LOGOUT,
+  });
+};
 
-
-
-
-
-
-export const Logout = ()=>(dispatch)=>{
-    localStorage.removeItem('userInfo')
+export const Register = (name, email, password) => async (dispatch) => {
+  try {
     dispatch({
-        type : actionTypes.USER_LOGIN_LOGOUT,
-    })
+      type: actionTypes.USER_REGISTER_REQUEST,
+    });
 
-}
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
+    const { data } = await axios.post(
+      "/api/users/register/",
+      { name: name, email: email, password: password },
+      config
+    );
+    // console.log("userActions.js ----->",data);
+    dispatch({
+      type: actionTypes.USER_REGISTER_SUCCESS,
+      payload: data,
+    });
 
+    dispatch({
+      type: actionTypes.USER_LOGIN_SUCCESS,
+      payload: data,
+    });
 
+    localStorage.setItem("userInfo", JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: actionTypes.USER_REGISTER_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
 
+export const getUserDetails = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: actionTypes.USER_DETAILS_REQUEST,
+    });
 
+    const { userLogin } = getState();
 
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userLogin.userInfo.token}`,
+      },
+    };
 
+    const { data } = await axios.get(`/api/users/${id}/`,config);
+    // console.log("userActions.js ----->",data);
+    dispatch({
+      type: actionTypes.USER_DETAILS_SUCCESS,
+      payload: data,
+    });
 
-export const Register = (name,email, password) => async (dispatch) => {
-    try {
-      dispatch({
-        type: actionTypes.USER_REGISTER_REQUEST,
-      });
-  
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-  
-      const { data } = await axios.post(
-        "/api/users/register/",
-        { 'name' : name ,'email': email,'password': password,},
-        config
-      );
-      // console.log("userActions.js ----->",data);
-      dispatch({
-          type : actionTypes.USER_REGISTER_SUCCESS,
-          payload : data
-      })
-
-      dispatch({
-        type : actionTypes.USER_LOGIN_SUCCESS,
-        payload : data
-    })
-  
-      localStorage.setItem('userInfo',JSON.stringify(data))
-  
-    } catch (error) {
-      dispatch({
-        type: actionTypes.USER_REGISTER_FAIL,
-        payload:
-          error.response && error.response.data.detail
-            ? error.response.data.detail
-            : error.message,
-      });
-    }
-  };
+  } catch (error) {
+    dispatch({
+      type: actionTypes.USER_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};

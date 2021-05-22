@@ -21,7 +21,7 @@ const LoginScreen = (props) => {
 
 
 //   console.log("LoginScreen ----- > ", props)
-  const redirect = props.location.serach ? props.location.serach.split("=")[1] : '/register';
+  const redirect = props.location.serach ? props.location.serach.split("=")[1] : '/';
 
 
 
