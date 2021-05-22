@@ -50,6 +50,9 @@ export const Logout = () => (dispatch) => {
   dispatch({
     type: actionTypes.USER_LOGIN_LOGOUT,
   });
+  dispatch({
+    type: actionTypes.USER_DETAILS_RESET,
+  })
 };
 
 
