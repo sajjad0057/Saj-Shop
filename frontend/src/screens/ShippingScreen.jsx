@@ -2,15 +2,23 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
+import { saveShippingAddress } from '../redux/actions/cartActions'
 
 const ShippingScreen = ({ history, location }) => {
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [postalcode, setPostalcode] = useState("");
-  const [country, setCountry] = useState("");
+  const cart = useSelector((state) => state.cart);
+  const { shippingAddress } = cart;
+
+  const dispatch = useDispatch()
+  const [address, setAddress] = useState(shippingAddress.address);
+  const [city, setCity] = useState(shippingAddress.city);
+  const [postalcode, setPostalcode] = useState(shippingAddress.postalcode);
+  const [country, setCountry] = useState(shippingAddress.country);
+
   const submitHandler = (e) => {
     e.preventDefault();
     console.log("ShippingScreen Form submitHandler Triggered !");
+    dispatch(saveShippingAddress({address,city,postalcode,country}));
+    history.push("/payment")
   };
   return (
     <FormContainer>
@@ -24,7 +32,7 @@ const ShippingScreen = ({ history, location }) => {
             as="textarea"
             rows={3}
             placeholder="Address"
-            value={address}
+            value={address?address:""}
             onChange={(e) => setAddress(e.target.value)}
           ></Form.Control>
         </Form.Group>
@@ -34,7 +42,7 @@ const ShippingScreen = ({ history, location }) => {
             required
             type="text"
             placeholder="city"
-            value={city}
+            value={city?city:""}
             onChange={(e) => setCity(e.target.value)}
           ></Form.Control>
         </Form.Group>
@@ -44,7 +52,7 @@ const ShippingScreen = ({ history, location }) => {
             required
             type="text"
             placeholder="Postal Code"
-            value={postalcode}
+            value={postalcode?postalcode:""}
             onChange={(e) => setPostalcode(e.target.value)}
           ></Form.Control>
         </Form.Group>
@@ -54,7 +62,7 @@ const ShippingScreen = ({ history, location }) => {
             required
             type="text"
             placeholder="country"
-            value={country}
+            value={country?country:""}
             onChange={(e) => setCountry(e.target.value)}
           ></Form.Control>
         </Form.Group>

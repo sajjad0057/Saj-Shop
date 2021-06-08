@@ -13,10 +13,6 @@ import {
   userUpdateProfileReducer,
 } from "./reducers/userReducer";
 
-
-
-
-
 const reducer = combineReducers({
   productList: productListReducer,
   productDetail: productDetailReducer,
@@ -24,7 +20,7 @@ const reducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailReducer,
-  userUpdateProfile : userUpdateProfileReducer,
+  userUpdateProfile: userUpdateProfileReducer,
 });
 
 const cartItemFromStorage = localStorage.getItem("cartItems")
@@ -35,10 +31,16 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
+const shippingAddressFromStorage = localStorage.getItem("shippingAddress")
+  ? JSON.parse(localStorage.getItem("shippingAddress"))
+  : {};
+
 const initState = {
   cart: {
     cartItems: cartItemFromStorage, // here, In global state Contain, cartReducer state , cart  property "cartItems" is  refill/updated by browser storage.
+    shippingAddress: shippingAddressFromStorage,
   },
+
   userLogin: {
     userInfo: userInfoFromStorage, // here, In global state Contain, useReducer state , userLogin  property "userInfo" is  refill/updated by browser storage.
   },
