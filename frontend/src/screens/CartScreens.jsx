@@ -30,7 +30,7 @@ function CartScreens(props) {
   };
 
   const checkOutHandler = ()=>{
-    console.log("CartScreens ----> checkOutHandler :");
+    //console.log("CartScreens ----> checkOutHandler :");
     props.history.push('/login?redirect=shipping')
   }
   return (

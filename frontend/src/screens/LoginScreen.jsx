@@ -20,8 +20,8 @@ const LoginScreen = (props) => {
 
 
 
-//   console.log("LoginScreen ----- > ", props)
-  const redirect = props.location.serach ? props.location.serach.split("=")[1] : '/';
+  //console.log("LoginScreen ----- > ", props.location.search.split("=") )
+  const redirect = props.location.search ? props.location.search.split("=")[1] : '/';
 
 
 
