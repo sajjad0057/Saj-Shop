@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import { saveShippingAddress } from '../redux/actions/cartActions'
+import CheckoutSteps from "../components/CheckoutSteps";
 
 const ShippingScreen = ({ history, location }) => {
   const cart = useSelector((state) => state.cart);
@@ -22,6 +23,8 @@ const ShippingScreen = ({ history, location }) => {
   };
   return (
     <FormContainer>
+        <CheckoutSteps step1 step2/>
+        <hr />
       <h2>Shipping ... </h2>
       <hr />
       <Form onSubmit={submitHandler}>
