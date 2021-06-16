@@ -89,7 +89,14 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def get_shippingAddress(self, obj):
         try:
-            address = ShippingAddressSerializer(obj.shippingAddress, many=False)
+            '''
+            # must be set obj.<lowercase_Model_name> if we can nesting serialize a Model  by using reference #
+            Here :
+            address=ShippingAddressSerializer(obj.shippingaddress, many=False).data by this we access serialize data. 
+            here address.data like as serialize.data ,thats we pass like Response(serialize.data) in previous code .
+            '''
+            address = ShippingAddressSerializer(obj.shippingaddress, many=False).data  
+            print("OrderSerializer -----> address : ",address)
         except:
             address = False
         return address
