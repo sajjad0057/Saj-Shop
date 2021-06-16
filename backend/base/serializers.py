@@ -64,7 +64,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    orders = serializers.SerializerMethodField(read_only=True)
+    orderItems = serializers.SerializerMethodField(read_only=True)
     shippingAddress = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -81,7 +81,7 @@ class OrderSerializer(serializers.ModelSerializer):
         https://docs.djangoproject.com/en/3.2/ref/models/relations/
         '''
 
-    def get_orders(self, obj):
+    def get_orderItems(self, obj):
         # create reverse relation . useing Related object reference .
         items = obj.orderitem_set.all()
         serializer = OrderItemSerializer(items, many=True)

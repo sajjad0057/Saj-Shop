@@ -18,7 +18,7 @@ from rest_framework.response import Response
 
 
 @api_view(['POST'])
-@permission_classes(['IsAuthenticated'])
+@permission_classes([IsAuthenticated])
 def addOrderItems(request):
     user = request.user
     data = request.data
@@ -50,6 +50,7 @@ def addOrderItems(request):
         # (3) Create order item and set order item relationship
         for i in orderItems:
             product = Product.objects.get(id=i['product_id'])
+            # print("order_view ----test ----> : ",product.image.url)
 
             item = OrderItem.objects.create(
                 product=product,
@@ -57,13 +58,13 @@ def addOrderItems(request):
                 name=product.name,
                 qty=i['qty'],
                 price=i['price'],
-                image=product.image.ulr,
+                image=product.image.url,
             )
 
         # (4) Update Stock
 
         product.countInStock -= item.qty
         product.save()
-    serializer = OrderSerializer(order, many=True)
+    serializer = OrderSerializer(order, many=False)
 
     return Response(serializer.data)

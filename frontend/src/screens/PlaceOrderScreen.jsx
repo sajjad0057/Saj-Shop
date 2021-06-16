@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Form,
@@ -9,28 +9,63 @@ import {
   Image,
   Card,
 } from "react-bootstrap";
-import FormContainer from "../components/FormContainer";
+// import FormContainer from "../components/FormContainer";
 import { Link } from "react-router-dom";
-//import { savePaymentMethod } from '../redux/actions/cartActions'
 import CheckoutSteps from "../components/CheckoutSteps";
 import Message from "../components/Message";
+import { createOrder } from "../redux/actions/orderActions";
+import { ORDER_CREATE_RESET } from "../redux/constants/orderConstants";
 
-const PlaceOrderScreen = () => {
+
+const PlaceOrderScreen = ({history}) => {
+
+  const orderCreate = useSelector(state => state.orderCreate)
+  const {order,success,error} = orderCreate;
+
+
   const cart = useSelector((state) => state.cart);
 
-
-  
   const { shippingAddress, paymentMethod, cartItems } = cart;
 
   //update object or initialize  : object_name.key = value [like as pyhton dict]
 
-  cart.itemsPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty,0).toFixed(2);  
-  cart.shippingPrice = cart.itemsPrice>100 ? 0 : 10;
-  cart.taxPrice = (0.05*cart.itemsPrice).toFixed(2);
-  cart.totalPrice = Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)
+  cart.itemsPrice = cartItems
+    .reduce((acc, item) => acc + item.price * item.qty, 0)
+    .toFixed(2);
+  cart.shippingPrice = cart.itemsPrice > 100 ? 0 : 10;
+  cart.taxPrice = (0.05 * cart.itemsPrice).toFixed(2);
+  cart.totalPrice =
+    Number(cart.itemsPrice) +
+    Number(cart.shippingPrice) +
+    Number(cart.taxPrice);
+
+  const dispatch = useDispatch();
+
+  if(!paymentMethod){
+    history.push('/payment')
+  }
+
+  useEffect(() => {
+    if(success){
+      history.push(`/order/${order.id}`)
+      dispatch({
+        type : ORDER_CREATE_RESET
+      })
+    }
+  }, [success,history])
 
   const placeOrder = () => {
-    console.log("PlaceOrderScreen !");
+    console.log("PlaceOrderScreen from Submitted !");
+    dispatch(createOrder({
+      orderItems : cartItems,
+      shippingAddress : shippingAddress,
+      paymentMethod : paymentMethod,
+      itemsPrice : cart.itemsPrice,
+      shippingPrice : cart.shippingPrice,
+      taxPrice : cart.taxPrice,
+      totalPrice : cart.totalPrice
+
+    }))
   };
   return (
     <div>
@@ -118,6 +153,12 @@ const PlaceOrderScreen = () => {
                   <Col> ${cart.totalPrice} </Col>
                 </Row>
               </ListGroup.Item>
+
+              <ListGroup.Item>
+                {error && <Message variant='danjer'>{error}</Message>}
+
+              </ListGroup.Item>
+
               <ListGroup.Item>
                 <Button
                   type="button"
