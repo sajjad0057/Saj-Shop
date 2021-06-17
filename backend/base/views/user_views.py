@@ -19,7 +19,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs) # here data is a dict, this dict contains 'resfresh', 'access', 'token' and etc key and their value.
-        print("test -----> MyTokenObtainPairSerializer in views.py --> :",UserSerializerWithToken(self.user))
+        #print("test -----> MyTokenObtainPairSerializer in views.py --> :",UserSerializerWithToken(self.user))
         serializer = UserSerializerWithToken(self.user).data
         for k,v in serializer.items():
             data[k] = v
@@ -43,7 +43,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
 @api_view(['POST'])
 def registerUser(request):
     data = request.data
-    print("data form  registerUser: ",data)
+    #print("data form  registerUser: ",data)
     try:
         user = User.objects.create(
         first_name = data['name'],

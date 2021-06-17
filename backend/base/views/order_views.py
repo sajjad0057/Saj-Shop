@@ -68,6 +68,27 @@ def addOrderItems(request):
     serializer = OrderSerializer(order, many=False)
 
     return Response(serializer.data)
+    
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserOrder(request):
+    user = request.user
+    '''
+    Django allows you to access reverse relations on a model. 
+    By default, Django creates a manager (RelatedManager) on your model 
+    to handle this, named <model>_set,
+    where <model> is your model name in lowercase.
+    Known --> More :
+    https://stackoverflow.com/questions/25386119/whats-the-difference-between-a-onetoone-manytomany-and-a-foreignkey-field-in-d
+    https://docs.djangoproject.com/en/3.2/ref/models/relations/
+    '''
+    orders = user.order_set.all()
+
+    serializer = OrderSerializer(orders,many=True)
+    return Response(serializer.data)
+
 
 
 @api_view(['GET'])
@@ -85,6 +106,8 @@ def getOrderById(request, pk):
         return Response({'details':'Order does not exists !'},status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateOrderToPaid(request,pk):
@@ -96,3 +119,6 @@ def updateOrderToPaid(request,pk):
     order.save()
     
     return Response('Order Was Paid ')
+
+
+

@@ -1,5 +1,7 @@
 import * as actionTypes from "../constants/userConstant";
+import { ORDER_LIST_RESET } from "../constants/orderConstants";
 import axios from "axios";
+
 
 
 
@@ -52,6 +54,9 @@ export const Logout = () => (dispatch) => {
   });
   dispatch({
     type: actionTypes.USER_DETAILS_RESET,
+  })
+  dispatch({
+    type : ORDER_LIST_RESET,
   })
 };
 
