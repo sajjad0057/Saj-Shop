@@ -83,3 +83,16 @@ def getOrderById(request, pk):
             return Response({'detail': 'Not Authorized to View this Order.'}, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response({'details':'Order does not exists !'},status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateOrderToPaid(request,pk):
+    order = Order.objects.get(id=pk)
+
+    order.isPaid = True
+    from datetime import datetime
+    order.paidAt = datetime.now()
+    order.save()
+    
+    return Response('Order Was Paid ')
