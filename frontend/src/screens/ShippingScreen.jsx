@@ -17,7 +17,7 @@ const ShippingScreen = ({ history, location }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("ShippingScreen Form submitHandler Triggered !");
+    //console.log("ShippingScreen Form submitHandler Triggered !");
     dispatch(saveShippingAddress({address,city,postalcode,country}));
     history.push("/payment")
   };

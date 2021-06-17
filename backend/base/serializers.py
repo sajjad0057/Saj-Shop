@@ -66,6 +66,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     orderItems = serializers.SerializerMethodField(read_only=True)
     shippingAddress = serializers.SerializerMethodField(read_only=True)
+    user = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Order
@@ -96,14 +97,14 @@ class OrderSerializer(serializers.ModelSerializer):
             here address.data like as serialize.data ,thats we pass like Response(serialize.data) in previous code .
             '''
             address = ShippingAddressSerializer(obj.shippingaddress, many=False).data  
-            print("OrderSerializer -----> address : ",address)
+            #print("OrderSerializer -----> address : ",address)
         except:
             address = False
         return address
 
     def get_user(self, obj):
         # create reverse relation . useing Related object reference .
-        user = obj.user_set.all()
+        user = obj.user
         serializer = UserSerializer(user, many=False)
         return serializer.data
 
