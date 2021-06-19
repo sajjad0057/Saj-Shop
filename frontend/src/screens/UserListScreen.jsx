@@ -28,8 +28,8 @@ const UserListScreen = ({ history }) => {
   }, [dispatch, history,successDelete]);
 
   const deleteHandler = (user_id) => {
-    console.log("UserListScreen ----->deleteHandler : ", user_id);
-    if(window.confirm("Are you Sure Want to delete this user ??? ")){
+    //console.log("UserListScreen ----->deleteHandler : ", user_id);
+    if(window.confirm("Are you Sure Want to delete this user ???")){
         dispatch(deleteUser(user_id))
     }
     
@@ -68,7 +68,7 @@ const UserListScreen = ({ history }) => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/admin/user/${user.id}`}>
+                  <LinkContainer to={`/admin/user/${user.id}/edit`}>
                     <Button variant="light" className="btn rounded btn-sm">
                       <i
                         className="fas fa-edit"
