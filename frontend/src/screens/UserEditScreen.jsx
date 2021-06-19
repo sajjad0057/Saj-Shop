@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
 import { Button, Form } from "react-bootstrap";
-import { getUserDetails } from "../redux/actions/userActions";
+import { getUserDetails, userStatusUpdateAction } from "../redux/actions/userActions";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import { USER_STATUS_UPDATE_RESET } from "../redux/constants/userConstant";
+
+
 
 function UserEditScreen({ match, history }) {
-    console.log("UserEditScreen ---- match : ",match);
+    //console.log("UserEditScreen ---- match : ",match);
   const userId = match.params.id;
 
   const [name, setName] = useState("");
@@ -19,28 +22,52 @@ function UserEditScreen({ match, history }) {
   const userDetails = useSelector((state) => state.userDetails);
   const { error, loading, user } = userDetails;
 
+  const userStatusUpdate = useSelector(state => state.userStatusUpdate)
+  const {error : updateError , loading : updateLoading ,success : updateSuccess} = userStatusUpdate
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(!user.name || user.id !== Number(userId)){
-        dispatch(getUserDetails(userId))
-    }else{
-        setName(user.name)
-        setEmail(user.email)
-        setIsAdmin(user.isAdmin)
-    }
-
-  }, [user,userId]);
+      if(updateSuccess){
+          dispatch({
+              type : USER_STATUS_UPDATE_RESET
+          })
+          history.push('/admin/users-list')
+      }else{
+        if(!user.name || user.id !== Number(userId)){
+            dispatch(getUserDetails(userId))
+        }else{
+            setName(user.name)
+            setEmail(user.email)
+            setIsAdmin(user.isAdmin)
+        }
+    
+      }
+    
+  }, [user,userId,updateSuccess,history]);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    // if we pass just variable into a object, not key value pair. when variable_name set as key and this variable_value set this keys_value automatically.  
+    dispatch(userStatusUpdateAction({      
+        id : user.id,
+        name,
+        email,
+        isAdmin,
+    }))
   };
 
   return (
     <div>
-      <Link to="admin/users-list" className="btn btn-light m-3 rounded ">GO BACK</Link>
+      <Link to="/admin/users-list/" className="btn btn-light m-3 rounded ">GO BACK</Link>
       <FormContainer>
         <h3 className="text-center">Edit User : </h3>
+        {
+            updateLoading && <Loader/>
+        }
+        {
+            updateError && <Message variant="danger">{updateError}</Message>
+        }
         <hr />
 
         {loading ? (

@@ -12,13 +12,17 @@ import {
 import { LinkContainer } from "react-router-bootstrap";
 import { Logout } from "../redux/actions/userActions";
 
-function Header() {
+function Header({history}) {
+
+  
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const dispatch = useDispatch();
 
   const logoutHandler = () => {
     //console.log("from Header logoutHandler triggered!");
+
+
     dispatch(Logout());
   };
 

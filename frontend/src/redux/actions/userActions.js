@@ -255,7 +255,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.delete(`/api/users/delete/${id}/`,
+    const { data } = await axios.put(`/api/users/delete/${id}/`,
     config);
 
     dispatch({
@@ -266,6 +266,51 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: actionTypes.USER_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+
+
+
+
+export const userStatusUpdateAction = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: actionTypes.USER_STATUS_UPDATE_REQUEST,
+    });
+
+    const { userLogin } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userLogin.userInfo.token}`,
+      },
+    };
+
+    console.log("userStatusUpdate --actions ---> user :",user);
+
+    const { data } = await axios.put(`/api/users/update/${user.id}/`,
+    user,
+    config);
+
+    dispatch({
+      type: actionTypes.USER_STATUS_UPDATE_SUCCESS,
+    });
+
+    dispatch({
+      type: actionTypes.USER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  
+  } catch (error) {
+    dispatch({
+      type: actionTypes.USER_STATUS_UPDATE_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail
