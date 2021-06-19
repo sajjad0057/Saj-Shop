@@ -8,6 +8,7 @@ urlpatterns= [
     path('profile/',views.getUserProfile,name='usersProfile'),
     path('profile/update/',views.updateUserProfile, name='updateProfile'),
     path('',views.getUser,name='allUsersProfile'),
-    path('register/',views.registerUser,name='registerUser')
+    path('register/',views.registerUser,name='registerUser'),
+    path('delete/<str:pk>/',views.delete_user,name='deleteUser'),
 
 ]

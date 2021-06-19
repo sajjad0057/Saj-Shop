@@ -5,7 +5,7 @@ import FormContainer from "../components/FormContainer";
 import { Table, Button } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { listOfUsers } from "../redux/actions/userActions";
+import { listOfUsers,deleteUser } from "../redux/actions/userActions";
 
 const UserListScreen = ({ history }) => {
   const userLogin = useSelector((state) => state.userLogin);
@@ -15,16 +15,25 @@ const UserListScreen = ({ history }) => {
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
 
+  const userDelete = useSelector(state => state.userDelete)
+  const {success:successDelete,error:errorDelete,loading:loadingDelete} = userDelete  // follow Distructuring rules .
+
+
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listOfUsers());
     } else {
       history.push("/login");
     }
-  }, [dispatch, history]);
+  }, [dispatch, history,successDelete]);
 
   const deleteHandler = (user_id) => {
-    console.log("UserListScreen ----->", user_id);
+    console.log("UserListScreen ----->deleteHandler : ", user_id);
+    if(window.confirm("Are you Sure Want to delete this user ??? ")){
+        dispatch(deleteUser(user_id))
+    }
+    
+
   };
   return (
     <div>

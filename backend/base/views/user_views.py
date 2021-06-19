@@ -98,9 +98,6 @@ def updateUserProfile(request):
 
 
 
-
-
-
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getUser(request):
@@ -110,4 +107,11 @@ def getUser(request):
 
 
 
-    
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request,pk):
+    userForDeletion = User.objects.get(id = pk)
+    userForDeletion.delete()
+    return Response("User Was Deleted")
+
+
