@@ -56,6 +56,9 @@ export const Logout = () => (dispatch) => {
     type: actionTypes.USER_DETAILS_RESET,
   })
   dispatch({
+    type: actionTypes.USER_LIST_RESET,
+  })
+  dispatch({
     type : ORDER_LIST_RESET,
   })
 };
@@ -186,6 +189,44 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: actionTypes.USER_UPDATE_PROFILE_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+
+
+
+
+export const listOfUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: actionTypes.USER_LIST_REQUEST,
+    });
+
+    const { userLogin } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userLogin.userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/users/`,
+    config);
+
+    dispatch({
+      type: actionTypes.USER_LIST_SUCCESS,
+      payload: data,
+    });
+  
+  } catch (error) {
+    dispatch({
+      type: actionTypes.USER_LIST_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

@@ -18,7 +18,7 @@ function Header() {
   const dispatch = useDispatch();
 
   const logoutHandler = () => {
-    console.log("from Header logoutHandler triggered!");
+    //console.log("from Header logoutHandler triggered!");
     dispatch(Logout());
   };
 
@@ -55,6 +55,21 @@ function Header() {
                       Login
                     </Nav.Link>
                   </LinkContainer>
+                )}
+
+                {userInfo && userInfo.isAdmin && (
+                  <NavDropdown title="ADMIN" id="adminmenu">
+                    <LinkContainer to="/admin/users-list">
+                      <NavDropdown.Item>users</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/admin/products-list">
+                      <NavDropdown.Item>Products</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/admin/orders-list">
+                      <NavDropdown.Item>Orders</NavDropdown.Item>
+                    </LinkContainer>
+
+                  </NavDropdown>
                 )}
               </Nav>
 
