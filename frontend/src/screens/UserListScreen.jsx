@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import FormContainer from "../components/FormContainer";
 import { Table, Button } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -25,7 +24,7 @@ const UserListScreen = ({ history }) => {
     } else {
       history.push("/login");
     }
-  }, [dispatch, history,successDelete]);
+  }, [dispatch, history,successDelete,userInfo]);
 
   const deleteHandler = (user_id) => {
     //console.log("UserListScreen ----->deleteHandler : ", user_id);
@@ -38,6 +37,12 @@ const UserListScreen = ({ history }) => {
   return (
     <div>
       <h3>Users :</h3>
+      {
+        loadingDelete && <Loader/>
+      }
+      {
+        errorDelete && <Message variant="danger">{errorDelete}</Message>
+      }
       <hr />
       {loading ? (
         <Loader />
@@ -55,7 +60,7 @@ const UserListScreen = ({ history }) => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users && users.map((user) => (
               <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.name}</td>

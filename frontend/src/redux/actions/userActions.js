@@ -255,7 +255,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.put(`/api/users/delete/${id}/`,
+    const { data } = await axios.delete(`/api/users/delete/${id}/`,
     config);
 
     dispatch({

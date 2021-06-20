@@ -143,7 +143,7 @@ function ProfileScreen(props) {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {orders && orders.map((order) => (
                 <tr key={order.id}>
                   <th>{order.id}</th>
                   <th>{order.createdAt.substring(0, 10)}</th>

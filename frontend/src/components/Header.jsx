@@ -12,7 +12,7 @@ import {
 import { LinkContainer } from "react-router-bootstrap";
 import { Logout } from "../redux/actions/userActions";
 
-function Header({history}) {
+function Header() {
 
   
   const userLogin = useSelector((state) => state.userLogin);
@@ -48,9 +48,12 @@ function Header({history}) {
                     <LinkContainer to="/profile">
                       <NavDropdown.Item>Profile</NavDropdown.Item>
                     </LinkContainer>
+                    {/* <LinkContainer to="/"> */}
                     <NavDropdown.Item onClick={logoutHandler}>
                       Logout
                     </NavDropdown.Item>
+                    {/* </LinkContainer> */}
+
                   </NavDropdown>
                 ) : (
                   <LinkContainer to="/login">
