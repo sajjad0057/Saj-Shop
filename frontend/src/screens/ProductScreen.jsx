@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Rating from "../components/Rating";
-import { productDetails } from "../redux/actions/productActions";
+import { productDetailsAction } from "../redux/actions/productActions";
 
 const ProductScreen = (props) => {
   const [Qty, setQty] = useState(1);
@@ -26,7 +26,7 @@ const ProductScreen = (props) => {
   const { loading, error, product } = productDetail;
 
   useEffect(() => {
-    dispatch(productDetails(props.match.params.id));
+    dispatch(productDetailsAction(props.match.params.id));
   }, [dispatch,props.match.params.id]);
 
   const addToCartHandler = () =>{

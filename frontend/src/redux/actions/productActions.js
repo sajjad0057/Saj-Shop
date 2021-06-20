@@ -25,7 +25,7 @@ export const listProducts = () =>async (dispatch)=>{
 }
 
 
-export const productDetails = (id) =>async (dispatch)=>{
+export const productDetailsAction = (id) =>async (dispatch)=>{
 
     try{
         dispatch({type:actionTypes.PRODUCT_DETAILS_REQUEST})
