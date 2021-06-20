@@ -52,7 +52,7 @@ const PlaceOrderScreen = ({history}) => {
         type : ORDER_CREATE_RESET
       })
     }
-  }, [success,history])
+  }, [success,history,dispatch])
 
   const placeOrder = () => {
     console.log("PlaceOrderScreen from Submitted !");

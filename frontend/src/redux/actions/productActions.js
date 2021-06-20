@@ -87,3 +87,46 @@ export const productDeleteAction = (id) => async (dispatch, getState) => {
   };
 
 
+
+
+
+
+
+  export const productCreateAction = () => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: actionTypes.PRODUCT_CREATE_REQUEST,
+      });
+  
+      const { userLogin } = getState();
+  
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userLogin.userInfo.token}`,
+        },
+      };
+  
+      const { data } = await axios.post(`/api/products/create/`, {} , config);
+      //console.log("productDeleteAction ----- > : ",data);
+  
+      dispatch({
+        type: actionTypes.PRODUCT_CREATE_SUCCESS,
+        payload : data,
+      });
+  
+  
+  
+    } catch (error) {
+      dispatch({
+        type: actionTypes.PRODUCT_CREATE_FAILED ,
+        payload:
+          error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+      });
+    }
+  };
+
+
+
