@@ -20,3 +20,14 @@ def getSingleProduct(request,pk):
         return Response(serializer.data)        
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteProduct(request,pk):
+    try:
+        product = Product.objects.get(id = pk)
+        product.delete()
+        return Response("Product Deleted !")        
+    except Product.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)

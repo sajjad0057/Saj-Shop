@@ -48,3 +48,42 @@ export const productDetails = (id) =>async (dispatch)=>{
 
 
 
+
+
+
+export const productDeleteAction = (id) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: actionTypes.PRODUCT_DELETE_REQUEST,
+      });
+  
+      const { userLogin } = getState();
+  
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userLogin.userInfo.token}`,
+        },
+      };
+  
+      const { data } = await axios.delete(`/api/products/delete/${id}`, config);
+      //console.log("productDeleteAction ----- > : ",data);
+  
+      dispatch({
+        type: actionTypes.PRODUCT_DELETE_SUCCESS,
+      });
+  
+  
+  
+    } catch (error) {
+      dispatch({
+        type: actionTypes.PRODUCT_DELETE_FAILED ,
+        payload:
+          error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+      });
+    }
+  };
+
+

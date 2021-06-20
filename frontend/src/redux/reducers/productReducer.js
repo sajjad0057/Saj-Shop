@@ -35,3 +35,23 @@ export const productDetailReducer = (state={product:{reviews:[]}},action) => {
     }
 
 }
+
+
+
+
+export const productDeleteReducer = (state={ },action) => {
+    switch(action.type){
+        case actionTypes.PRODUCT_DELETE_REQUEST:
+            return {loading:true}
+        case actionTypes.PRODUCT_DELETE_SUCCESS:
+            return {loading:false,success : true}
+            
+        case actionTypes.PRODUCT_DELETE_FAILED:
+            return {loading:false,error:action.payload}
+
+        default:
+            return state
+
+    }
+
+}
