@@ -130,3 +130,53 @@ export const productDeleteAction = (id) => async (dispatch, getState) => {
 
 
 
+
+
+
+
+
+  export const productUpdateAction = (product) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: actionTypes.PRODUCT_UPDATE_REQUEST,
+      });
+  
+      const { userLogin } = getState();
+  
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userLogin.userInfo.token}`,
+        },
+      };
+  
+      const { data } = await axios.put(`/api/products/update/${product.id}/`, product , config);
+
+  
+      dispatch({
+        type: actionTypes.PRODUCT_UPDATE_SUCCESS,
+        payload : data,
+      });
+
+
+      dispatch({
+        type : actionTypes.PRODUCT_DETAILS_SUCCESS,
+        payload : data,
+      })
+  
+  
+  
+    } catch (error) {
+      dispatch({
+        type: actionTypes.PRODUCT_UPDATE_FAILED ,
+        payload:
+          error.response && error.response.data.detail
+            ? error.response.data.detail
+            : error.message,
+      });
+    }
+  };
+
+
+
+

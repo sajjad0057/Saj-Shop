@@ -3,67 +3,84 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
 import { Button, Form } from "react-bootstrap";
-import { productDetailsAction } from "../redux/actions/productActions";
+import {
+  productDetailsAction,
+  productUpdateAction,
+} from "../redux/actions/productActions";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-
-
-
+import { PRODUCT_UPDATE_RESET } from "../redux/constants/productConstant";
 
 function ProductEditScreen({ match, history }) {
-
   const productId = match.params.id;
-    const [name, setName] = useState('')
-    const [price, setPrice] = useState('')
-    const [image, setImage] = useState('')
-    const [brand, setBrand] = useState('')
-    const [countInStock, setCountInStoke] = useState('')
-    const [category, setCategory] = useState('')
-    const [description, setDescription] = useState('')
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState("");
+  const [brand, setBrand] = useState("");
+  const [countInStock, setCountInStoke] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
 
   const productDetail = useSelector((state) => state.productDetail);
   const { error, loading, product } = productDetail;
 
+  const productUpdate = useSelector((state) => state.productUpdate);
+  const {
+    error: errorUpdate,
+    loading: loadingUpdate,
+    success: successUpdate,
+  } = productUpdate;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-        if(!product.name || product.id !== Number(productId)){
-            dispatch(productDetailsAction(productId))
-        }else{
-            setName(product.name)
-            setPrice(product.price)
-            setImage(product.image)
-            setBrand(product.brand)
-            setCountInStoke(product.countInStock)
-            setCategory(product.category)
-            setDescription(product.description)
-            
-        }
-    
-      
-    
-  }, [dispatch,productId,product,history]);
+    if (successUpdate) {
+      dispatch({
+        type: PRODUCT_UPDATE_RESET,
+      });
+      history.push("/admin/products-list");
+    } else {
+      if (!product.name || product.id !== Number(productId)) {
+        dispatch(productDetailsAction(productId));
+      } else {
+        setName(product.name);
+        setPrice(product.price);
+        setImage(product.image);
+        setBrand(product.brand);
+        setCountInStoke(product.countInStock);
+        setCategory(product.category);
+        setDescription(product.description);
+      }
+    }
+  }, [dispatch, productId, product, history, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     console.log("ProductEditScreen --- > Triggered !");
-    // // if we pass just variable into a object, not key value pair. when variable_name set as key and this variable_value set this keys_value automatically.  
-    // dispatch(productUpdateAction({      
-    //     id : user.id,
-    //     name,
-    //     email,
-    //     isAdmin,
-    // }))
+    dispatch(
+      productUpdateAction({
+        id: productId,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        countInStock,
+        description
+      })
+    );
   };
 
   return (
     <div>
-      <Link to="/admin/products-list/" className="btn btn-light m-3 rounded ">GO BACK</Link>
+      <Link to="/admin/products-list/" className="btn btn-light m-3 rounded ">
+        GO BACK
+      </Link>
       <FormContainer>
         <h3 className="text-center">Edit Product : </h3>
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
 
-        
         <hr />
 
         {loading ? (
@@ -107,7 +124,7 @@ function ProductEditScreen({ match, history }) {
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
               ></Form.Control>
-            </Form.Group>            
+            </Form.Group>
             <Form.Group controlId="countInStock">
               <Form.Label> CountInStock </Form.Label>
               <Form.Control
@@ -129,7 +146,7 @@ function ProductEditScreen({ match, history }) {
             <Form.Group controlId="description">
               <Form.Label> Description </Form.Label>
               <Form.Control
-                type="number"
+                type="text"
                 placeholder="Set description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
