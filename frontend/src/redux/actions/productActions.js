@@ -218,3 +218,24 @@ export const productDeleteAction = (id) => async (dispatch, getState) => {
 
 
 
+
+  export const listOfTopProducts = () =>async (dispatch)=>{
+    try{
+        dispatch({type:actionTypes.PRODUCT_TOP_REQUEST})
+        const {data} = await axios.get(`/api/products/top/`)
+        dispatch({
+            type : actionTypes.PRODUCT_TOP_SUCCESS,
+            payload : data
+        })
+
+    }catch(err){
+        // console.log("sajjad",err.message,err.response,err.response.data.message);
+        dispatch({
+            type:actionTypes.PRODUCT_TOP_FAILED,
+            payload : err.response && err.response.data.detail
+            ? err.response.data.detail
+            : err.message
+        
+        })
+    }
+}

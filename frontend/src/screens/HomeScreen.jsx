@@ -6,6 +6,8 @@ import { listProducts } from "../redux/actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Paginate from "../components/Paginate";
+import CarouselProduct from "../components/CarouselProduct";
+
 
 function HomeScreen({ history }) {
   const dispatch = useDispatch();
@@ -21,7 +23,14 @@ function HomeScreen({ history }) {
 
   return (
     <div>
-      <h2 className="text-muted">Viewing All products</h2>
+      <div className="mt-3 mb-5">
+      {
+        !keyword && <CarouselProduct/>
+      }
+      </div>
+
+      
+      <h2 className="text-muted text-center">Viewing All products</h2>
       <hr />
       {loading ? (
         <Loader />
