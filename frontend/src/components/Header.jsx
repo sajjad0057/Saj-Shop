@@ -11,6 +11,9 @@ import {
 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Logout } from "../redux/actions/userActions";
+import SearchBox from "./SearchBox";
+
+
 
 function Header() {
 
@@ -29,13 +32,14 @@ function Header() {
   return (
     <div>
       <header>
-        <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+        <Navbar bg="light" variant="light" expand="lg" collapseOnSelect>
           <Container>
             <LinkContainer to="/">
               <Navbar.Brand href="#home">Saj Shop</Navbar.Brand>
             </LinkContainer>
 
             <Navbar.Collapse id="basic-navbar-nav">
+              
               <Nav className="mr-auto">
                 <LinkContainer to="/cart">
                   <Nav.Link>
@@ -79,15 +83,7 @@ function Header() {
                   </NavDropdown>
                 )}
               </Nav>
-
-              <Form inline>
-                <FormControl
-                  type="text"
-                  placeholder="Search"
-                  className="mr-sm-2"
-                />
-                <Button variant="outline-success">Search</Button>
-              </Form>
+              <SearchBox/>
             </Navbar.Collapse>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
           </Container>

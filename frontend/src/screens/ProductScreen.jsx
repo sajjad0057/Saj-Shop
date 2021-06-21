@@ -8,16 +8,21 @@ import {
   Card,
   Form,
 } from "react-bootstrap";
+
+
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Rating from "../components/Rating";
+
 import {
   productDetailsAction,
   productReviewCreateAction,
 } from "../redux/actions/productActions";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../redux/constants/productConstant";
+
+
 
 const ProductScreen = (props) => {
 
@@ -231,8 +236,7 @@ const ProductScreen = (props) => {
                     </Form>
                   ) : (
                     <Message variant="warning">
-                      Please <Link to="/login">Login</Link> to write your review
-                      !
+                      Please <Link to="/login">Login</Link> to write your review !
                     </Message>
                   )}
                 </ListGroup.Item>
@@ -244,5 +248,8 @@ const ProductScreen = (props) => {
     </div>
   );
 };
+
+
+
 
 export default ProductScreen;

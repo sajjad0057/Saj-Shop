@@ -6,20 +6,21 @@ import { listProducts } from "../redux/actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 
-function HomeScreen() {
+function HomeScreen({history}) {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
   const { loading, products, error } = productList;
 
   // console.log("Check -----> ", productList);
-
+  const keyword = history.location.search
+  console.log("Check HomeScreen -----> ", keyword);
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(keyword));
+  }, [dispatch,keyword]);
 
   return (
     <div>
-      <h2>Latest Product</h2>
+      <h2>Viewing All products</h2>
       <hr />
       {loading ? (
         <Loader/>

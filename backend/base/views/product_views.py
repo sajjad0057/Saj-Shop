@@ -7,7 +7,13 @@ from rest_framework.response import Response
 
 @api_view(['GET'])
 def getProducts(request):
-    products = Product.objects.all()
+    query = request.query_params.get('keyword')
+
+    #print("getProducts --->query : ",query)
+    if query == None:
+        query = ''
+
+    products = Product.objects.filter(name__icontains=query)
     serializer = ProductSerializer(products,many=True) # many = True cz, here serialize many product.
     return Response(serializer.data) 
 
