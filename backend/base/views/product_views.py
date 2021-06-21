@@ -1,9 +1,11 @@
+from django.core import paginator
 from base.serializers import ProductSerializer
 from base.models import Product, Review
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 @api_view(['GET'])
 def getProducts(request):
@@ -14,8 +16,30 @@ def getProducts(request):
         query = ''
 
     products = Product.objects.filter(name__icontains=query)
+
+    '''
+    See For Paginator in Dajngo : 
+
+    https://docs.djangoproject.com/en/3.2/topics/pagination/
+    https://docs.djangoproject.com/en/3.2/ref/paginator/#django.core.paginator.Paginator
+    '''
+    page_no = request.query_params.get('page')
+    p = Paginator(products,6)
+    try:
+        products = p.page(page_no)
+
+    except PageNotAnInteger:
+        products = p.page(1)
+    except:
+        products = p.page(p.num_pages)
+
+    if page_no == None:
+        page_no = 1
+    page_no = int(page_no)
+
+
     serializer = ProductSerializer(products,many=True) # many = True cz, here serialize many product.
-    return Response(serializer.data) 
+    return Response({'products':serializer.data,'page_no':page_no,'pages':p.num_pages}) 
 
 
 @api_view(['GET'])
