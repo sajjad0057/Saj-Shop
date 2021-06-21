@@ -1,23 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Row, ListGroup, Image, Card } from "react-bootstrap";
+import { Col, Row, ListGroup, Image, Card,Button } from "react-bootstrap";
 import { PayPalButton } from "react-paypal-button-v2";
 // import FormContainer from "../components/FormContainer";
 import { Link } from "react-router-dom";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { getOrderDetails, payOrder } from "../redux/actions/orderActions";
-import { ORDER_PAY_RESET } from "../redux/constants/orderConstants";
+import { getOrderDetails, payOrder,orderDeliverAction } from "../redux/actions/orderActions";
+import { ORDER_PAY_RESET,ORDER_DELIVER_RESET } from "../redux/constants/orderConstants";
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match ,history }) => {
   //console.log("OrderScreen ------> : ", match);
   const orderId = match.params.id;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
 
   const orderPay = useSelector((state) => state.orderPay);
   //by distructuring rules loading be renamed or assign in laodingPay same as success.
-  const { loading: loadingPay, success: successPay } = orderPay;  
+  const { loading: loadingPay, success: successPay } = orderPay; 
+
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  //by distructuring rules loading be renamed or assign in laodingPay same as success.
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;  
+
 
   const dispatch = useDispatch();
 
@@ -43,9 +54,16 @@ const OrderScreen = ({ match }) => {
   };
 
   useEffect(() => {
-    if (!order || successPay || order.id !== Number(orderId)) {
+    if(!userInfo){
+      history.push("/login")
+    }
+    if (!order || successPay || order.id !== Number(orderId) || successDeliver) {
       dispatch({ type: ORDER_PAY_RESET });
+
+      dispatch({ type: ORDER_DELIVER_RESET });
+
       dispatch(getOrderDetails(orderId));
+
     } else if (!order.isPaid) {
       if (!window.paypal) {
         addPayPalScript();
@@ -53,11 +71,15 @@ const OrderScreen = ({ match }) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, order, orderId, successPay]);
+  }, [dispatch, order, orderId, successPay,successDeliver,userInfo]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult));
   };
+
+  const deliverHandler = () =>{
+    dispatch(orderDeliverAction(order))
+  }
 
   return loading ? (
     <Loader />
@@ -92,9 +114,9 @@ const OrderScreen = ({ match }) => {
                 {order.shippingAddress.postalcode} ,{" "}
                 {order.shippingAddress.country}
               </p>
-              {order.IsDelivered ? (
+              {order.isDelivered ? (
                 <Message variant="success">
-                  Delivered On : {order.deliveredAt}
+                  Delivered On : {order.deliveredAt.substring(0,18)}
                 </Message>
               ) : (
                 <Message variant="warning">Not Delivered</Message>
@@ -107,7 +129,7 @@ const OrderScreen = ({ match }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant="success">Paid On : {order.paidAt}</Message>
+                <Message variant="success">Paid On : {order.paidAt.substring(0,18)}</Message>
               ) : (
                 <Message variant="warning">Not Paid</Message>
               )}
@@ -191,6 +213,25 @@ const OrderScreen = ({ match }) => {
                 </ListGroup.Item>
               )}
             </ListGroup>
+
+            {
+              loadingDeliver && <Loader/>
+            }
+
+            {
+              userInfo && userInfo.isAdmin &&  order.isPaid && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button
+                  type = "button"
+                  className = "btn btn-block btn-info rounded"
+                  onClick={deliverHandler}
+                  >
+                    Mark as Delivered 
+                  </Button>
+
+                </ListGroup.Item>
+              )
+            }
           </Card>
         </Col>
       </Row>

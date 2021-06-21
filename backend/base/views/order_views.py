@@ -132,3 +132,14 @@ def updateOrderToPaid(request,pk):
 
 
 
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateOrderToDelivered(request,pk):
+    order = Order.objects.get(id=pk)
+
+    order.isDelivered = True
+    from datetime import datetime
+    order.deliveredAt = datetime.now()
+    order.save()
+    
+    return Response('Order Was Delivered ! ')
