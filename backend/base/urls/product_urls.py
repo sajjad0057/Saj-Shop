@@ -8,6 +8,7 @@ urlpatterns= [
     path('delete/<str:pk>/',views.deleteProduct,name="delete-product"),
     path('update/<str:pk>/',views.updateProduct,name="update-product"),
     path('create/',views.createProduct,name="create-products"),
+    path('upload_img/',views.uploadImage,name="upload-image"),
     path('<str:pk>/',views.getSingleProduct,name="product"),
 
 ]

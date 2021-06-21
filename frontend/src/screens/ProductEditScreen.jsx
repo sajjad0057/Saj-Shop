@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios'
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer";
@@ -20,6 +21,8 @@ function ProductEditScreen({ match, history }) {
   const [countInStock, setCountInStoke] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false)
+
 
   const productDetail = useSelector((state) => state.productDetail);
   const { error, loading, product } = productDetail;
@@ -71,6 +74,34 @@ function ProductEditScreen({ match, history }) {
     );
   };
 
+
+  const uploadFileHandler   = async (e) =>{
+    console.log("ProductEditScreen --- > File is Uploading  !  File ===>",e.target.files[0]);
+    const file = e.target.files[0]
+    const formData = new FormData()
+    formData.append('image',file)
+    formData.append('product_id',productId)
+    setUploading(true)
+    console.log("ProductEditScreen --- > File is Uploading  ! formData ===>",formData);
+
+    try{
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.post(`/api/products/upload_img/`, formData , config);
+      setImage(data)
+      setUploading(false)
+    }catch(error){
+      setUploading(false)
+    }
+
+    
+
+  }
+
   return (
     <div>
       <Link to="/admin/products-list/" className="btn btn-light m-3 rounded ">
@@ -115,6 +146,15 @@ function ProductEditScreen({ match, history }) {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
+              <Form.File 
+              id = "image-file"
+              label = "Choose File"
+              custom
+              onChange = {uploadFileHandler}
+              />
+              {uploading && <Loader/>}
+
+              
             </Form.Group>
             <Form.Group controlId="brand">
               <Form.Label> Brand </Form.Label>

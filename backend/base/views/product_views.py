@@ -70,3 +70,19 @@ def updateProduct(request,pk):
         return Response(serializer.data)        
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+
+
+
+
+
+@api_view(['POST'])
+def uploadImage(request):
+    data = request.data
+
+    product_id = data['product_id']
+    product = Product.objects.get(id = product_id)
+    product.image = request.FILES.get('image')
+    product.save()
+
+    return Response("Image Uploaded ")
