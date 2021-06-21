@@ -47,7 +47,7 @@ function ProfileScreen(props) {
         setEmail(user.email);
       }
     }
-  }, [dispatch, userInfo, user, success]);
+  }, [dispatch, userInfo, user, success,orders]);
 
   const submitHandler = (e) => {
     e.preventDefault();

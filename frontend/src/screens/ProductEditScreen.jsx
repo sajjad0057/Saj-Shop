@@ -82,7 +82,7 @@ function ProductEditScreen({ match, history }) {
     formData.append('image',file)
     formData.append('product_id',productId)
     setUploading(true)
-    console.log("ProductEditScreen --- > File is Uploading  ! formData ===>",formData);
+    //console.log("ProductEditScreen --- > File is Uploading  ! formData ===>",formData.values());
 
     try{
       const config = {
