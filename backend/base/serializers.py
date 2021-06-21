@@ -42,11 +42,33 @@ class UserSerializerWithToken(UserSerializer):
         return str(token.access_token)
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Review
+        fields = '__all__'
 
+class ProductSerializer(serializers.ModelSerializer):
+    reviews = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Product
         fields = '__all__'
+    '''
+    Django allows you to access reverse relations on a model. 
+    By default, Django creates a manager (RelatedManager) on your model 
+    to handle this, named <model>_set,
+    where <model> is your model name in lowercase.
+    Known --> More :
+    https://stackoverflow.com/questions/25386119/whats-the-difference-between-a-onetoone-manytomany-and-a-foreignkey-field-in-d
+    https://docs.djangoproject.com/en/3.2/ref/models/relations/
+    '''
+
+    def get_reviews(self,obj):
+        reviews = obj.review_set.all()
+        serializer = ReviewSerializer(reviews,many=True)
+        return serializer.data
+
+
 
 
 class ShippingAddressSerializer(serializers.ModelSerializer):

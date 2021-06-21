@@ -1,5 +1,5 @@
 from base.serializers import ProductSerializer
-from base.models import Product
+from base.models import Product, Review
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
@@ -86,3 +86,59 @@ def uploadImage(request):
     product.save()
 
     return Response("Image Uploaded ")
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createProductReview(request,pk):
+    user = request.user
+    data = request.data
+    product = Product.objects.get(id = pk)
+
+    # 1 - check Review already Exists :
+    '''
+    Django allows you to access reverse relations on a model. 
+    By default, Django creates a manager (RelatedManager) on your model 
+    to handle this, named <model>_set,
+    where <model> is your model name in lowercase.
+    Known --> More :
+    https://stackoverflow.com/questions/25386119/whats-the-difference-between-a-onetoone-manytomany-and-a-foreignkey-field-in-d
+    https://docs.djangoproject.com/en/3.2/ref/models/relations/
+    '''
+    alreadyExists = product.review_set.filter(user=user).exists()  # exits() returen Boolean Value
+
+    if alreadyExists:
+        content = { 'details' : 'Product already reviewed by you !' }
+        return Response(content,status=status.HTTP_400_BAD_REQUEST)
+    # 2 - No rating  if set 0 :
+    elif data['rating'] == 0:
+        content = { 'details' : 'Please Select a Rating !' }
+        return Response(content,status=status.HTTP_400_BAD_REQUEST)
+
+    # 3 - Create Review :
+
+    else:
+        review = Review.objects.create(
+            user = user,
+            product = product,
+            name = user.first_name,
+            rating = data['rating'],
+            comment = data['comment'],
+
+        )
+
+        reviews = product.review_set.all()  # Django allows you to access reverse relations on a model. 
+        product.numReviews = len(reviews)
+        total_review = 0
+        for i in reviews:
+            total_review += i.rating
+
+        product.rating = total_review / len(reviews)
+        product.save()
+
+        return Response({'datails':'Review Added !'})
+
+
+
+
+
